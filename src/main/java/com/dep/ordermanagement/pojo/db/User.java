@@ -1,13 +1,10 @@
 /**
  * Copyright © 2024 Mavenir Systems
  */
-package com.dep.ordermanagement.pojo;
+package com.dep.ordermanagement.pojo.db;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /***
  * @author Aditya Patil
@@ -21,6 +18,20 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    private String email;
+
+    private String password;
+
+    private String firstName;
+
+    private String userType;
+
+    private String address;
+
+    private String country;
+
+    private String zipCode;
 
     @OneToOne
     private Cart cart;

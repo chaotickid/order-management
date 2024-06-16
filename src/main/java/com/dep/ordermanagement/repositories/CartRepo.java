@@ -3,7 +3,7 @@
  */
 package com.dep.ordermanagement.repositories;
 
-import com.dep.ordermanagement.pojo.Cart;
+import com.dep.ordermanagement.pojo.db.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /***

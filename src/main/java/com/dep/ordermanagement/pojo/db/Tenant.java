@@ -1,11 +1,10 @@
 /**
  * Copyright © 2024 Mavenir Systems
  */
-package com.dep.ordermanagement.pojo;
+package com.dep.ordermanagement.pojo.db;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.util.ArrayList;
 import java.util.List;
