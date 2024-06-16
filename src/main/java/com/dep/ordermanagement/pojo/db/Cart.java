@@ -26,7 +26,7 @@ public class Cart {
 
     private String cartStatus;
 
-    private String cartPrice;
+    private int cartPrice;
 
     @OneToOne
     private User user;

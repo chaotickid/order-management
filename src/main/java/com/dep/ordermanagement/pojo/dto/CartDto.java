@@ -22,7 +22,7 @@ public class CartDto {
 
     private String cartStatus;
 
-    private String cartPrice;
+    private int cartPrice;
 
     private UserDto user;
 

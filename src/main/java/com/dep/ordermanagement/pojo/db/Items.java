@@ -19,6 +19,10 @@ public class Items {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String itemName;
+
+    private String specifications;
+
     private String price;
 
     private String availableQuantity;

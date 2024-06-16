@@ -18,6 +18,10 @@ public class ItemsDto {
 
     private String price;
 
+    private String itemName;
+
+    private String specifications;
+
     private String availableQuantity;
 
     private TenantDto tenant;
