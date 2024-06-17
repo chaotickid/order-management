@@ -3,8 +3,11 @@
  */
 package com.dep.ordermanagement.services;
 
+import com.dep.ordermanagement.pojo.db.Tenant;
+import com.dep.ordermanagement.pojo.db.User;
 import com.dep.ordermanagement.pojo.dto.TenantDto;
 import com.dep.ordermanagement.repositories.TenantRepo;
+import com.dep.ordermanagement.repositories.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +23,22 @@ import org.springframework.stereotype.Service;
 public class TenantService {
 
     @Autowired
-    public ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public TenantRepo tenantRepo;
+    private TenantRepo tenantRepo;
+
+    @Autowired
+    private UserRepo userRepo;
 
     public TenantDto createTenant(TenantDto tenantDto){
-        return null;
+        Tenant tenant = modelMapper.map(tenantDto, Tenant.class);
+        User user = new User();
+        user.setEmail("tenant@yopmail.com");
+        User savedUserReference = userRepo.save(user);
+        tenant.addUserList(savedUserReference);
+        tenantRepo.save(tenant);
+        return tenantDto;
     }
 
     public TenantDto getTenant(int id){

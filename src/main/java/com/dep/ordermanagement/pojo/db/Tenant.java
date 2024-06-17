@@ -42,7 +42,7 @@ public class Tenant {
 
     public void addItemList(Items items) {
         items.setTenant(this);
-        this.addItemList(items);
+        this.itemsList.add(items);
     }
 
     public void removeItem(Items items){
@@ -53,7 +53,7 @@ public class Tenant {
     //user
     public void addUserList(User user){
         user.setTenant(this);
-        this.addUserList(user);
+        this.userList.add(user);
     }
 
     public void removeUser(User user){

@@ -14,6 +14,7 @@ import com.dep.ordermanagement.repositories.CartRepo;
 import com.dep.ordermanagement.repositories.ItemRepo;
 import com.dep.ordermanagement.repositories.OrderRepo;
 import com.dep.ordermanagement.repositories.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 public class OrderService {
 
     @Autowired
@@ -46,7 +48,6 @@ public class OrderService {
     public CartDto createOrdersAndAddToCart(ItemList itemsDtoList, Integer userId) {
         User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not exits"));
 
-        Cart cart = new Cart();
 
         //get item list from db
         List<Items> itemsList = new ArrayList<>();
@@ -60,23 +61,34 @@ public class OrderService {
         }
 
         //create orders from item list
+        Cart cart;
+
+        if (null == user.getCart()) {
+            cart = new Cart();
+        } else {
+            cart = user.getCart();
+        }
+
         if (!CollectionUtils.isEmpty(itemsList)) {
             for (Items items : itemsList) {
                 Order order = new Order();
                 order.setFinalPrice(items.getPrice());
                 order.setOrderStatus("CREATED");
-                order.setItemId(items);
+                order.mapItemIdToOrder(items);
                 orderRepo.save(order);
                 //setting price and adding order into the cart
-                cartPrice =  cartPrice + Integer.parseInt(order.getFinalPrice());
+                cartPrice = cart.getCartPrice() + Integer.parseInt(order.getFinalPrice());
                 cart.addOrder(order);
                 log.debug("order saved successfully in db");
             }
             cart.setCartPrice(cartPrice);
-            cartRepo.save(cart);
+            if (null == user.getCart()) {
+                cartRepo.save(cart);
+
+            }
         }
 
-        user.setCart(cart);
+        cart.mapUserToCart(user);
 
         return null;
     }

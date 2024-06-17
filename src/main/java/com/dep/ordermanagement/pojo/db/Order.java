@@ -29,4 +29,9 @@ public class Order {
 
     @ManyToOne
     private Cart cart;
+
+    public void mapItemIdToOrder(Items items){
+        this.setItemId(items);
+        items.setOrder(this);
+    }
 }

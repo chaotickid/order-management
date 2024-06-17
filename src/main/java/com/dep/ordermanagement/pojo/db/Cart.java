@@ -35,9 +35,15 @@ public class Cart {
     private List<Order> orders = new ArrayList<>();
 
     //helper methods
+
+    public void mapUserToCart(User user){
+        this.setUser(user);
+        user.setCart(this);
+    }
+
     public void addOrder(Order order){
         order.setCart(this);
-        this.addOrder(order);
+        this.getOrders().add(order);
     }
 
     public void removeOrder(Order order){
