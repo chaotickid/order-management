@@ -3,12 +3,12 @@
  */
 package com.dep.ordermanagement.repositories;
 
-import com.dep.ordermanagement.pojo.db.Items;
+import com.dep.ordermanagement.pojo.db.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /***
  * @author Aditya Patil
- * @date 16-06-2024
+ * @date 18-06-2024
  */
-public interface ItemRepo extends JpaRepository<Items, Integer> {
+public interface ProductsRepo extends JpaRepository<Products, Integer> {
 }

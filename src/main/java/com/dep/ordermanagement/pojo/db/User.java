@@ -6,13 +6,16 @@ package com.dep.ordermanagement.pojo.db;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /***
  * @author Aditya Patil
- * @date 16-06-2024
+ * @date 18-06-2024
  */
-
 @Data
 @Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -23,19 +26,16 @@ public class User {
 
     private String password;
 
-    private String firstName;
+    private String userName;
 
     private String userType;
 
-    private String address;
-
-    private String country;
-
-    private String zipCode;
+    @ManyToOne
+    private Tenant tenant;
 
     @OneToOne
     private Cart cart;
 
-    @ManyToOne
-    private Tenant tenant;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Order> orderList = new ArrayList<>();
 }

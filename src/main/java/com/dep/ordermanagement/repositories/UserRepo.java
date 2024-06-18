@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /***
  * @author Aditya Patil
- * @date 16-06-2024
+ * @date 18-06-2024
  */
 public interface UserRepo extends JpaRepository<User, Integer> {
 }

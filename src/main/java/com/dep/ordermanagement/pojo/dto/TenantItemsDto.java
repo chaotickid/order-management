@@ -10,13 +10,16 @@ import lombok.Data;
  * @date 18-06-2024
  */
 @Data
-public class TenantDto {
+public class TenantItemsDto {
 
     private int id;
 
-    private String email;
+    private String productName;
 
-    private String password;
+    private String price;
 
-    private String tenantName;
+    private String description;
+
+    private String specifications;
+
 }

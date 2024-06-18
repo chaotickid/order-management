@@ -2,6 +2,10 @@
  * Copyright © 2024 Mavenir Systems
  */
 package com.dep.ordermanagement.pojo.db;
+/***
+ * @author Aditya Patil
+ * @date 18-06-2024
+ */
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,13 +13,9 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-/***
- * @author Aditya Patil
- * @date 16-06-2024
- */
-
-@Entity
 @Data
+@Entity
+@Table(name = "tenant")
 public class Tenant {
 
     @Id
@@ -24,40 +24,33 @@ public class Tenant {
 
     private String tenantName;
 
-    private String state;
+    private String createdAt;
 
-    private String zipCode;
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<TenantItems> tenantItemsList = new ArrayList<>();
 
-    private String address;
-
-    private String businessName;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tenant")
-    private List<Items> itemsList = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<User> userList = new ArrayList<>();
 
     //helper methods
-
-    public void addItemList(Items items) {
-        items.setTenant(this);
-        this.itemsList.add(items);
-    }
-
-    public void removeItem(Items items){
-        items.setTenant(null);
-        this.removeItem(items);
-    }
-
-    //user
-    public void addUserList(User user){
-        user.setTenant(this);
+    public void addUserIntoList(User user) {
         this.userList.add(user);
+        user.setTenant(this);
     }
 
-    public void removeUser(User user){
-        this.removeUser(user);
+    public void removeUserFromList(User user) {
+        this.userList.remove(user);
         user.setTenant(null);
     }
+
+    public void addTenantItemsToList(TenantItems tenantItems){
+        this.tenantItemsList.add(tenantItems);
+        tenantItems.setTenant(this);
+    }
+
+    public void removeTenantItemsFromList(TenantItems tenantItems){
+        this.tenantItemsList.remove(tenantItems);
+        tenantItems.setTenant(null);
+    }
+
 }

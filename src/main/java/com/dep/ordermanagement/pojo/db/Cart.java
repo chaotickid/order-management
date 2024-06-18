@@ -11,10 +11,11 @@ import java.util.List;
 
 /***
  * @author Aditya Patil
- * @date 16-06-2024
+ * @date 18-06-2024
  */
-@Data
+
 @Entity
+@Data
 @Table(name = "my_cart")
 public class Cart {
 
@@ -22,32 +23,12 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String shippingAddress;
-
-    private String cartStatus;
-
-    private int cartPrice;
-
     @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "cart", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Products> productsList = new ArrayList<>();
 
-    //helper methods
-
-    public void mapUserToCart(User user){
-        this.setUser(user);
-        user.setCart(this);
-    }
-
-    public void addOrder(Order order){
-        order.setCart(this);
-        this.getOrders().add(order);
-    }
-
-    public void removeOrder(Order order){
-        order.setCart(null);
-        this.removeOrder(order);
-    }
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<DiscountedProducts> discountedProductsList = new ArrayList<>();
 }

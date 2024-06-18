@@ -8,28 +8,25 @@ import lombok.Data;
 
 /***
  * @author Aditya Patil
- * @date 16-06-2024
+ * @date 18-06-2024
  */
-@Entity
 @Data
-@Table(name = "my_items_list")
-public class Items {
+@Entity
+@Table(name = "tenant_items")
+public class TenantItems {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String itemName;
-
-    private String specifications;
+    private String productName;
 
     private String price;
 
-    private String availableQuantity;
+    private String description;
+
+    private String specifications;
 
     @ManyToOne
     private Tenant tenant;
-
-    @OneToOne(mappedBy = "itemId")
-    private Order order;
 }
