@@ -27,6 +27,8 @@ public class TenantItems {
 
     private String specifications;
 
+    private String imagePath;
+
     @ManyToOne
     private Tenant tenant;
 }

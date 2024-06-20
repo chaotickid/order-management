@@ -3,6 +3,7 @@
  */
 package com.dep.ordermanagement.services;
 
+import com.dep.ordermanagement.configs.AppConfig;
 import com.dep.ordermanagement.pojo.db.DiscountedProducts;
 import com.dep.ordermanagement.pojo.db.Tenant;
 import com.dep.ordermanagement.pojo.db.TenantItems;
@@ -14,7 +15,16 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +45,9 @@ public class TenantItemsService {
 
     @Autowired
     private DiscountedProductsRepo discountedProductsRepo;
+
+    @Autowired
+    private AppConfig appConfig;
 
     public void requestForDiscount(List<TenantItemsDto> tenantItemsDtoList) {
 
@@ -59,13 +72,17 @@ public class TenantItemsService {
     /***
      * 1] First fetch tenant from DB
      * 2] create TenantItems from List add save and add it under Tenant
+     * 3] upload file
      *
      * @param tenantItemsDtoList
      * @return
      */
-    public List<TenantItemsDto> createTenantItem(List<TenantItemsDto> tenantItemsDtoList, int tenantId) {
+    public List<TenantItemsDto> createTenantItem(List<TenantItemsDto> tenantItemsDtoList,
+                                                 int tenantId,
+                                                 MultipartFile file) throws IOException {
         Tenant fetchedFromDb = null;
         TenantItems tenantItems = null;
+        List<TenantItemsDto> tenantItemsDtoListProcessed = new ArrayList<>();
         //1] First fetch tenant from DB
         try {
             fetchedFromDb = tenantRepo.findById(tenantId).orElseThrow(() -> new RuntimeException("Tenant does not exist"));
@@ -83,15 +100,41 @@ public class TenantItemsService {
                     tenantItems.setDescription(tenantItemsDtoList.get(i).getDescription());
                     tenantItems.setSpecifications(tenantItemsDtoList.get(i).getSpecifications());
                     tenantItemsRepo.save(tenantItems);
-
-                    //adding under tenant
+                    if (file.isEmpty()) {
+                        throw new RuntimeException("file is empty");
+                    }
+                    String dirPath = "uploads/" + "tenantId-" + String.valueOf(fetchedFromDb.getId()) + "/";
+                    File dir = new File(dirPath);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+                    String originalFilename = file.getOriginalFilename();
+                    String fileExtension = "";
+                    if (originalFilename != null && originalFilename.contains(".")) {
+                        fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                    }
+                    String customFilename = String.valueOf(tenantItems.getId()) + "_" +
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + fileExtension;
+                    Path path = Paths.get(dirPath + customFilename);
+                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    tenantItems.setImagePath(customFilename);
                     fetchedFromDb.addTenantItemsToList(tenantItems);
                 }
             }
         } catch (Exception e) {
             throw e;
         }
-        return tenantItemsDtoList;
+        for (int i = 0; i < fetchedFromDb.getTenantItemsList().size(); i++) {
+            TenantItems tenantItemsDb = fetchedFromDb.getTenantItemsList().get(i);
+            TenantItemsDto tenantItemsDto = new TenantItemsDto();
+            tenantItemsDto.setId(tenantItemsDb.getId());
+            tenantItemsDto.setPrice(tenantItemsDb.getPrice());
+            tenantItemsDto.setDescription(tenantItemsDb.getDescription());
+            tenantItemsDto.setSpecifications(tenantItemsDb.getSpecifications());
+            tenantItemsDto.setImagePath(tenantItemsDb.getImagePath());
+            tenantItemsDtoListProcessed.add(tenantItemsDto);
+        }
+        return tenantItemsDtoListProcessed;
     }
 
     /***

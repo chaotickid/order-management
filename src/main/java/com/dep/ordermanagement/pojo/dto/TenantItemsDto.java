@@ -24,4 +24,6 @@ public class TenantItemsDto {
 
     private String discountedPrice;
 
+    private String imagePath;
+
 }

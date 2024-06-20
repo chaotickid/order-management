@@ -34,6 +34,8 @@ public class Products {
 
     private String tenantItemId;
 
+    private String imagePath;
+
     @ManyToOne
     private Cart cart;
 }

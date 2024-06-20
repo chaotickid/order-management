@@ -30,6 +30,8 @@ public class OrderItems {
 
     private String quantity;
 
+    private String imagePath;
+
     @ManyToOne
     private Order order;
 

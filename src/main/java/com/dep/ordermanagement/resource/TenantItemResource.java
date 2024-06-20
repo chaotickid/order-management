@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
 
 /***
@@ -23,10 +24,12 @@ public class TenantItemResource {
     @Autowired
     private TenantItemsService tenantItemsService;
 
-    @PostMapping("/tenant-items/{tenantId}")
-    public ResponseEntity<?> createTenantItems(@RequestBody List<TenantItemsDto> tenantItemsDto,
-                                               @PathVariable(value = "tenantId") int tenantId) {
-        return new ResponseEntity<>(tenantItemsService.createTenantItem(tenantItemsDto, tenantId), HttpStatus.CREATED);
+    @PostMapping(value = "/tenant-items/{tenantId}"/*,consumes = {"*"},
+            produces = MediaType.ALL_VALUE*/)
+    public ResponseEntity<?> createTenantItems(@RequestPart(value = "content")List<TenantItemsDto> tenantItemsDto,
+                                               @PathVariable(value = "tenantId") int tenantId,
+                                               @RequestPart(value = "file")MultipartFile file) throws IOException {
+        return new ResponseEntity<>(tenantItemsService.createTenantItem(tenantItemsDto, tenantId, file), HttpStatus.CREATED);
     }
 
     //TODO: need to check first who is logged in if user logged in need to look up for discounted products
