@@ -44,6 +44,7 @@ public class TenantService {
     public TenantDto createTenant(TenantDto tenantDto) {
         Tenant tenant = null;
         User user = null;
+        TenantDto tenantDtoToUI = new TenantDto();
         //1] create user first for tenant
         try {
             user = new User();
@@ -66,7 +67,10 @@ public class TenantService {
         }
         //3] Add user under tenant
         tenant.addUserIntoList(user);
-        return tenantDto;
+        tenantDtoToUI.setId(tenant.getId());
+        tenantDtoToUI.setTenantName(tenant.getTenantName());
+        tenantDtoToUI.setEmail(tenantDto.getEmail());
+        return tenantDtoToUI;
     }
 
     /***
@@ -82,6 +86,7 @@ public class TenantService {
         Tenant tenant = null;
         User user = null;
         Cart cart = null;
+        TenantDto tenantDtoToUI = new TenantDto();
         //1] create user first for tenant
         try {
             user = new User();
@@ -111,6 +116,9 @@ public class TenantService {
 
         //5] add that cart to user
         user.addCartToUser(cart);
-        return tenantDto;
+        tenantDtoToUI.setId(tenant.getId());
+        tenantDtoToUI.setTenantName(tenant.getTenantName());
+        tenantDtoToUI.setEmail(tenantDto.getEmail());
+        return tenantDtoToUI;
     }
 }
