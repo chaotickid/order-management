@@ -7,12 +7,10 @@ import lombok.Data;
 
 /***
  * @author Aditya Patil
- * @date 18-06-2024
+ * @date 19-06-2024
  */
 @Data
-public class TenantItemsDto {
-
-    private int id;
+public class OrderedItemDto {
 
     private String productName;
 
@@ -22,6 +20,6 @@ public class TenantItemsDto {
 
     private String specifications;
 
-    private String discountedPrice;
+    private String quantity;
 
 }

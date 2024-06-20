@@ -20,6 +20,20 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String productName;
+
+    private String price;
+
+    private String description;
+
+    private String specifications;
+
+    private boolean isSelectedForFinalOrder;
+
+    private String quantity;
+
+    private String tenantItemId;
+
     @ManyToOne
     private Cart cart;
 }

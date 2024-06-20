@@ -35,4 +35,10 @@ public class TenantItemResource {
                                             @RequestParam(value = "userId", required = false)int userId){
         return new ResponseEntity<>(tenantItemsService.getTenantItemsDto(tenantId, userId), HttpStatus.OK);
     }
+
+    @PostMapping("/tenant-items/requestDiscount")
+    public ResponseEntity<?> requestFroDiscount(@RequestBody List<TenantItemsDto> tenantItemsDto){
+        tenantItemsService.requestForDiscount(tenantItemsDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

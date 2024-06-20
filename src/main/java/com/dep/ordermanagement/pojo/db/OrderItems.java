@@ -20,6 +20,16 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String productName;
+
+    private String price;
+
+    private String description;
+
+    private String specifications;
+
+    private String quantity;
+
     @ManyToOne
     private Order order;
 

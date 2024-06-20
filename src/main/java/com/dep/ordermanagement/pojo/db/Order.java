@@ -22,10 +22,26 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String orderStatus;
+
+    private String createdAt;
+
+    private String expectedDelivery;
+
     @ManyToOne
     private User user;
 
     @OneToMany(mappedBy = "order", cascade =  CascadeType.ALL, fetch =  FetchType.LAZY,orphanRemoval = true)
     private List<OrderItems> orderItemsList = new ArrayList<>();
+
+    public void addOrderItemUnderOrder(OrderItems orderItems){
+        this.orderItemsList.add(orderItems);
+        orderItems.setOrder(this);
+    }
+
+    public void removeOrderItemUnderOrder(OrderItems orderItems){
+        this.orderItemsList.remove(orderItems);
+        orderItems.setOrder(null);
+    }
 
 }

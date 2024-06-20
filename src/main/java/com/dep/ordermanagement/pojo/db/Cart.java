@@ -31,4 +31,15 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DiscountedProducts> discountedProductsList = new ArrayList<>();
+
+    //helper methods
+    public void addProductToCart(Products products){
+        this.getProductsList().add(products);
+        products.setCart(this);
+    }
+
+    public void removeProductFrmCart(Products products){
+        this.getProductsList().remove(products);
+        products.setCart(null);
+    }
 }

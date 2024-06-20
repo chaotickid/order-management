@@ -34,8 +34,25 @@ public class User {
     private Tenant tenant;
 
     @OneToOne
+    @JoinColumn(name = "cartId")
     private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Order> orderList = new ArrayList<>();
+
+    //helper method
+    public void addCartToUser(Cart cart){
+        this.setCart(cart);
+        cart.setUser(this);
+    }
+
+    public void addOrderToUser(Order order){
+        this.getOrderList().add(order);
+        order.setUser(this);
+    }
+
+    public void removeOrderToUser(Order order){
+        this.getOrderList().remove(order);
+        order.setUser(null);
+    }
 }

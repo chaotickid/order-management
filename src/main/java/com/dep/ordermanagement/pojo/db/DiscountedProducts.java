@@ -20,6 +20,10 @@ public class DiscountedProducts {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer id;
 
+    private String discountedPrice;
+
+    private String tenantItemId;
+
     @ManyToOne
     private Cart cart;
 }

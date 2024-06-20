@@ -3,9 +3,11 @@
  */
 package com.dep.ordermanagement.services;
 
+import com.dep.ordermanagement.pojo.db.Cart;
 import com.dep.ordermanagement.pojo.db.Tenant;
 import com.dep.ordermanagement.pojo.db.User;
 import com.dep.ordermanagement.pojo.dto.TenantDto;
+import com.dep.ordermanagement.repositories.CartRepo;
 import com.dep.ordermanagement.repositories.TenantRepo;
 import com.dep.ordermanagement.repositories.UserRepo;
 import jakarta.transaction.Transactional;
@@ -28,6 +30,9 @@ public class TenantService {
 
     @Autowired
     private TenantRepo tenantRepo;
+
+    @Autowired
+    private CartRepo cartRepo;
 
     /***
      * 1] create user first for tenant
@@ -68,12 +73,15 @@ public class TenantService {
      * 1] create user first for tenant
      * 2] create tenant
      * 3] Add user under tenant
+     * 4] create a empty cart
+     * 5] add that cart to user
      *
      * @param tenantDto
      */
     public TenantDto createUser(TenantDto tenantDto) {
         Tenant tenant = null;
         User user = null;
+        Cart cart = null;
         //1] create user first for tenant
         try {
             user = new User();
@@ -96,6 +104,13 @@ public class TenantService {
         }
         //3] Add user under tenant
         tenant.addUserIntoList(user);
+
+        //4] create a empty cart
+        cart = new Cart();
+        cartRepo.save(cart);
+
+        //5] add that cart to user
+        user.addCartToUser(cart);
         return tenantDto;
     }
 }
