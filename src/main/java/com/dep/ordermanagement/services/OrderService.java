@@ -114,6 +114,7 @@ public class OrderService {
                     orderItems.setPrice(products.getPrice());
                     orderItems.setDescription(products.getDescription());
                     orderItems.setSpecifications(products.getSpecifications());
+                    orderItems.setQuantity(products.getQuantity());
                     orderItemsRepo.save(orderItems);
                     //adding ordered item under order
                     order.addOrderItemUnderOrder(orderItems);

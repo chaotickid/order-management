@@ -59,7 +59,7 @@ public class TenantService {
         //2] create tenant
         try {
             tenant = new Tenant();
-            tenant.setTenantName(tenant.getTenantName());
+            tenant.setTenantName(tenantDto.getTenantName());
             tenant.setCreatedAt(String.valueOf(Instant.now()));
             tenantRepo.save(tenant);
         } catch (Exception e) {
@@ -98,12 +98,9 @@ public class TenantService {
         } catch (Exception e) {
             throw e;
         }
-        //2] create tenant
+        //2] fetch tenant
         try {
-            tenant = new Tenant();
-            tenant.setTenantName(tenant.getTenantName());
-            tenant.setCreatedAt(String.valueOf(Instant.now()));
-            tenantRepo.save(tenant);
+            tenant = tenantRepo.findById(tenantDto.getId()).orElseThrow(()-> new RuntimeException("tenant does not exist"));
         } catch (Exception e) {
             throw e;
         }

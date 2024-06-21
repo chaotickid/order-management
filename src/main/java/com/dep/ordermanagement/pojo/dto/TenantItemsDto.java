@@ -26,4 +26,6 @@ public class TenantItemsDto {
 
     private String imagePath;
 
+    private String quantity;
+
 }

@@ -1,2 +1,7 @@
 app:
   imageFolderName: uploads/
+logging:
+  level:
+    root: DEBUG
+    org.springframework: DEBUG
+    com.dep.ordermanagement: DEBUG

@@ -179,6 +179,7 @@ public class CartService {
                     products.setPrice(discountedPrice);
                     products.setDescription(tenantItems.getDescription());
                     products.setSpecifications(tenantItems.getSpecifications());
+                    products.setQuantity(tenantItemsDto.getQuantity());
                     productsRepo.save(products);
                     //by default product is selected
                     products.setSelectedForFinalOrder(Boolean.TRUE);
