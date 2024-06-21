@@ -3,6 +3,7 @@
  */
 package com.dep.ordermanagement.services;
 
+import com.dep.ordermanagement.common.CustomResponseException;
 import com.dep.ordermanagement.configs.AppConfig;
 import com.dep.ordermanagement.pojo.db.DiscountedProducts;
 import com.dep.ordermanagement.pojo.db.Tenant;
@@ -13,6 +14,7 @@ import com.dep.ordermanagement.repositories.TenantItemsRepo;
 import com.dep.ordermanagement.repositories.TenantRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.dep.ordermanagement.common.ErrorCodeEnum.*;
 
 /***
  * @author Aditya Patil
@@ -64,7 +68,7 @@ public class TenantItemsService {
                 }
             }
         } catch (Exception e) {
-            throw e;
+            throw new CustomResponseException(ER10005, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -87,7 +91,7 @@ public class TenantItemsService {
         try {
             fetchedFromDb = tenantRepo.findById(tenantId).orElseThrow(() -> new RuntimeException("Tenant does not exist"));
         } catch (Exception e) {
-            throw e;
+            throw new CustomResponseException(ER10004, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         //2] create TenantItems from List add save and add it under Tenant
         try {
@@ -122,7 +126,7 @@ public class TenantItemsService {
                 }
             }
         } catch (Exception e) {
-            throw e;
+            throw new CustomResponseException(ER10006, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         for (int i = 0; i < fetchedFromDb.getTenantItemsList().size(); i++) {
             TenantItems tenantItemsDb = fetchedFromDb.getTenantItemsList().get(i);
@@ -156,31 +160,35 @@ public class TenantItemsService {
         try {
             fetchedFromDb = tenantRepo.findById(tenantId).orElseThrow(() -> new RuntimeException("Tenant does not exist"));
         } catch (Exception e) {
-            throw e;
+            throw new CustomResponseException(ER10004, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        //2] if Tenant item list is empty then return []
-        if (CollectionUtils.isEmpty(fetchedFromDb.getTenantItemsList())) {
-            return tenantItemsDtoList;
-        }
-
-        //3] convertItemList to itemDto and return in from of []
-        for (int i = 0; i < fetchedFromDb.getTenantItemsList().size(); i++) {
-            String discountedPrice = "";
-            Optional<DiscountedProducts> discountedProducts = discountedProductsRepo.findByTenantItemId(String.valueOf(fetchedFromDb.getTenantItemsList().get(i).getId()));
-            if (discountedProducts.isEmpty()) {
-                //
-                discountedPrice = fetchedFromDb.getTenantItemsList().get(i).getPrice();
-            } else {
-                discountedPrice = discountedProducts.get().getDiscountedPrice();
+        try {
+            //2] if Tenant item list is empty then return []
+            if (CollectionUtils.isEmpty(fetchedFromDb.getTenantItemsList())) {
+                return tenantItemsDtoList;
             }
-            TenantItemsDto tenantItemsDto = new TenantItemsDto();
-            tenantItemsDto.setId(fetchedFromDb.getTenantItemsList().get(i).getId());
-            tenantItemsDto.setProductName(fetchedFromDb.getTenantItemsList().get(i).getProductName());
-            tenantItemsDto.setPrice(discountedPrice);
-            tenantItemsDto.setDescription(fetchedFromDb.getTenantItemsList().get(i).getDescription());
-            tenantItemsDto.setSpecifications(fetchedFromDb.getTenantItemsList().get(i).getSpecifications());
-            tenantItemsDtoList.add(tenantItemsDto);
+
+            //3] convertItemList to itemDto and return in from of []
+            for (int i = 0; i < fetchedFromDb.getTenantItemsList().size(); i++) {
+                String discountedPrice = "";
+                Optional<DiscountedProducts> discountedProducts = discountedProductsRepo.findByTenantItemId(String.valueOf(fetchedFromDb.getTenantItemsList().get(i).getId()));
+                if (discountedProducts.isEmpty()) {
+                    //
+                    discountedPrice = fetchedFromDb.getTenantItemsList().get(i).getPrice();
+                } else {
+                    discountedPrice = discountedProducts.get().getDiscountedPrice();
+                }
+                TenantItemsDto tenantItemsDto = new TenantItemsDto();
+                tenantItemsDto.setId(fetchedFromDb.getTenantItemsList().get(i).getId());
+                tenantItemsDto.setProductName(fetchedFromDb.getTenantItemsList().get(i).getProductName());
+                tenantItemsDto.setPrice(discountedPrice);
+                tenantItemsDto.setDescription(fetchedFromDb.getTenantItemsList().get(i).getDescription());
+                tenantItemsDto.setSpecifications(fetchedFromDb.getTenantItemsList().get(i).getSpecifications());
+                tenantItemsDtoList.add(tenantItemsDto);
+            }
+        }catch (Exception e){
+            throw new CustomResponseException(ER10007, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return tenantItemsDtoList;
     }
