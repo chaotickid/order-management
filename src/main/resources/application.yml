@@ -1,7 +1,26 @@
-app:
-  imageFolderName: uploads/
+server:
+  port: 8080
 logging:
   level:
     root: DEBUG
     org.springframework: DEBUG
     com.dep.ordermanagement: DEBUG
+spring:
+  application:
+    name: order-management
+  datasource:
+    url: jdbc:mysql://localhost:3306/ordermanagement
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+app:
+  imageFolderName: uploads/
