@@ -3,6 +3,7 @@
  */
 package com.dep.ordermanagement.services;
 
+import com.dep.ordermanagement.common.CustomResponseException;
 import com.dep.ordermanagement.pojo.db.Cart;
 import com.dep.ordermanagement.pojo.db.Tenant;
 import com.dep.ordermanagement.pojo.db.User;
@@ -12,9 +13,12 @@ import com.dep.ordermanagement.repositories.TenantRepo;
 import com.dep.ordermanagement.repositories.UserRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+
+import static com.dep.ordermanagement.common.ErrorCodeEnum.*;
 
 /***
  * @author Aditya Patil
@@ -96,20 +100,24 @@ public class TenantService {
             user.setUserType("CONSUMER");
             userRepo.save(user);
         } catch (Exception e) {
-            throw e;
+            throw new CustomResponseException(ER10001, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         //2] fetch tenant
         try {
-            tenant = tenantRepo.findById(tenantDto.getId()).orElseThrow(()-> new RuntimeException("tenant does not exist"));
+            tenant = tenantRepo.findById(tenantDto.getId()).orElseThrow(() -> new RuntimeException("tenant does not exist"));
         } catch (Exception e) {
-            throw e;
+            throw new CustomResponseException(ER10002, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         //3] Add user under tenant
         tenant.addUserIntoList(user);
 
         //4] create a empty cart
         cart = new Cart();
-        cartRepo.save(cart);
+        try {
+            cartRepo.save(cart);
+        } catch (Exception e) {
+            throw new CustomResponseException(ER10003, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         //5] add that cart to user
         user.addCartToUser(cart);
