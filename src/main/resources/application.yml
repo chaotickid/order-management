@@ -24,3 +24,6 @@ spring:
       max-request-size: 20MB
 app:
   imageFolderName: uploads/
+  jwtSecret: ======================order=management===========================
+  jwtExpirationMs: 86400000
+  issuer: https://order-management

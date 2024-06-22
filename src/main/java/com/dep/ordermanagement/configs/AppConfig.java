@@ -19,4 +19,10 @@ public class AppConfig {
 
     private String imageFolderName;
 
+    private String jwtSecret;
+
+    private String jwtExpirationMs;
+
+    private String issuer;
+
 }
