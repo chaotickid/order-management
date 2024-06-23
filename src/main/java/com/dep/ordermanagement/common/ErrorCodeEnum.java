@@ -33,7 +33,9 @@ public enum ErrorCodeEnum {
 //    ER10011("ER10002", ""),
 //    ER10012("ER10002", "");
 
-    ErrorCodeEnum(String er10001, String s) {
+    ErrorCodeEnum(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage =errorMessage;
     }
 
     private String errorCode;

@@ -32,19 +32,19 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication) {
 
-        CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Map<String, String> claims = new HashMap<>();
-        claims.put("tenantId", userPrincipal.getTenantId());
-        claims.put("userId", userPrincipal.getUserId());
-        claims.put("role", userPrincipal.getRole());
-        claims.put("email", userPrincipal.getEmail());
+        claims.put("tenantId", customUserDetails.getTenantId());
+        claims.put("userId", customUserDetails.getUserId());
+        claims.put("role", customUserDetails.getRole());
+        claims.put("email", customUserDetails.getEmail());
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setIssuer(appConfig.getIssuer())
                 .setExpiration(new Date((new Date()).getTime() + Integer.parseInt(appConfig.getJwtExpirationMs())))
+                .setSubject((customUserDetails.getEmail()))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
