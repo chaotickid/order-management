@@ -4,6 +4,7 @@
 package com.dep.ordermanagement.pojo.db;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Email
+    @Column(unique = true)
     private String email;
 
     private String password;

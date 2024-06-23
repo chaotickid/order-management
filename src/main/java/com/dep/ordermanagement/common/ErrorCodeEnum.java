@@ -24,7 +24,8 @@ public enum ErrorCodeEnum {
     ER10009("ER10009", "Order does not exist"),
     ER10010("ER10010", "Order id is not associated with requested user"),
     ER10011("ER10011", "Something went wrong while creating order receipt"),
-    ER10013("ER10013", "User already exists with same email id");
+    ER10013("ER10013", "User already exists with same email id"),
+    ER10014("ER10014", "Sign In failed, please try after some time");
 //    ER10011("ER10002", ""),
 //    ER10011("ER10002", ""),
 //    ER10011("ER10002", ""),

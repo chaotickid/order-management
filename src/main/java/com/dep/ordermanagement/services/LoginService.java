@@ -70,15 +70,21 @@ public class LoginService {
      * @return
      */
     public JwtTokenResponse signIn(SignInRequest signInRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        JwtTokenResponse jwtTokenResponse = new JwtTokenResponse();
-        jwtTokenResponse.setEmail(userDetails.getEmail());
-        jwtTokenResponse.setId(userDetails.getId());
-        jwtTokenResponse.setJwt(jwt);
+        JwtTokenResponse jwtTokenResponse = null;
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            jwtTokenResponse = new JwtTokenResponse();
+            jwtTokenResponse.setEmail(userDetails.getEmail());
+            jwtTokenResponse.setId(userDetails.getId());
+            jwtTokenResponse.setJwt(jwt);
+        } catch (Exception e) {
+            log.debug("Exception captured while sign in process, Reason: {}", e.getMessage());
+            throw new CustomResponseException(ER10014, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return jwtTokenResponse;
     }
 
