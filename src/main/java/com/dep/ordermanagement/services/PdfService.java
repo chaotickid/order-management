@@ -54,7 +54,7 @@ public class PdfService {
      * @return
      * @throws IOException
      */
-    public ByteArrayInputStream generateOrderReceipt(String userId, String orderId) throws IOException {
+    public ByteArrayInputStream generateInvoice(String userId, String orderId) throws IOException {
         Tenant tenant = null;
         User user = null;
         Order order = null;
@@ -92,7 +92,7 @@ public class PdfService {
 
 
             // Add title
-            document.add(new Paragraph("*** ORDER RECEIPT ***")
+            document.add(new Paragraph("*** INVOICE ***")
                     .setFont(font)
                     .setFontSize(24)
                     .setBold()

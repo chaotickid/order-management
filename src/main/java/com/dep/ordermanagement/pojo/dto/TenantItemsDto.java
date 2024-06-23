@@ -3,6 +3,7 @@
  */
 package com.dep.ordermanagement.pojo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 /***
@@ -10,6 +11,7 @@ import lombok.Data;
  * @date 18-06-2024
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TenantItemsDto {
 
     private int id;

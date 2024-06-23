@@ -26,7 +26,7 @@ public class CartResource {
         return new ResponseEntity<>(cartService.addProductsToCart(cartDto), HttpStatus.OK);
     }
 
-    @GetMapping("/view")
+    @GetMapping("/view/{userId}")
     public ResponseEntity<?> viewCart(@PathVariable (value = "userId") int userId){
         return new ResponseEntity<>(cartService.viewItemsInTheCart(userId), HttpStatus.OK);
 

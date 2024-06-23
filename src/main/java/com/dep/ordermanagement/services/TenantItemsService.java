@@ -132,6 +132,7 @@ public class TenantItemsService {
             TenantItems tenantItemsDb = fetchedFromDb.getTenantItemsList().get(i);
             TenantItemsDto tenantItemsDto = new TenantItemsDto();
             tenantItemsDto.setId(tenantItemsDb.getId());
+            tenantItemsDto.setProductName(tenantItemsDb.getProductName());
             tenantItemsDto.setPrice(tenantItemsDb.getPrice());
             tenantItemsDto.setDescription(tenantItemsDb.getDescription());
             tenantItemsDto.setSpecifications(tenantItemsDb.getSpecifications());
@@ -149,11 +150,11 @@ public class TenantItemsService {
      * 3] convertItemList to itemDto and return in from of []
      * 4] if discountedProduct is available for that product fetch price from discounted product or
      *    fall back to tenantItemPrice
+     *
      * @param tenantId
-     * @param userId
      * @return
      */
-    public List<TenantItemsDto> getTenantItemsDto(int tenantId, int userId) {
+    public List<TenantItemsDto> getTenantItemsDto(int tenantId) {
         Tenant fetchedFromDb = null;
         List<TenantItemsDto> tenantItemsDtoList = new ArrayList<>();
         //1] First fetch tenant from DB
@@ -185,6 +186,7 @@ public class TenantItemsService {
                 tenantItemsDto.setPrice(discountedPrice);
                 tenantItemsDto.setDescription(fetchedFromDb.getTenantItemsList().get(i).getDescription());
                 tenantItemsDto.setSpecifications(fetchedFromDb.getTenantItemsList().get(i).getSpecifications());
+                tenantItemsDto.setImagePath(fetchedFromDb.getTenantItemsList().get(i).getImagePath());
                 tenantItemsDtoList.add(tenantItemsDto);
             }
         }catch (Exception e){

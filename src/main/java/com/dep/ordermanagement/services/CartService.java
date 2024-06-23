@@ -142,6 +142,8 @@ public class CartService {
     public CartDto addProductsToCart(CartDto cartDto) {
         User fetchedUserFromDb = null;
         Cart fetchedCartForUser = null;
+        CartDto cartDtoForUI = new CartDto();
+        cartDtoForUI.setTenantItemsList(new ArrayList<>());
         //1] First fetch tenant from DB
         try {
             fetchedUserFromDb = userRepo.findById(Integer.parseInt(cartDto.getUserId())).orElseThrow(() -> new RuntimeException("User does not exist"));
@@ -184,6 +186,20 @@ public class CartService {
                     //by default product is selected
                     products.setSelectedForFinalOrder(Boolean.TRUE);
                     fetchedCartForUser.addProductToCart(products);
+
+                    //create object for UI
+
+                    cartDto.getTenantItemsList().get(i).setProductName(products.getProductName());
+                    cartDto.getTenantItemsList().get(i).setPrice(products.getPrice());
+                    cartDto.getTenantItemsList().get(i).setDescription(products.getDescription());
+                    cartDto.getTenantItemsList().get(i).setSpecifications(products.getSpecifications());
+
+                    //TODO: NEED TO THINK
+                    //cartDto.getTenantItemsList().get(i).setDiscountedPrice(products.getProductName());
+
+                    cartDto.getTenantItemsList().get(i).setImagePath(products.getImagePath());
+
+
                 }
             }
         } catch (Exception e) {

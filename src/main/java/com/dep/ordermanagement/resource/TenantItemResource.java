@@ -33,10 +33,9 @@ public class TenantItemResource {
     }
 
     //TODO: need to check first who is logged in if user logged in need to look up for discounted products
-    @GetMapping("/tenant-items")
-    public ResponseEntity<?> getTenantItems(@RequestParam(value = "tenantId") int tenantId,
-                                            @RequestParam(value = "userId", required = false)int userId){
-        return new ResponseEntity<>(tenantItemsService.getTenantItemsDto(tenantId, userId), HttpStatus.OK);
+    @GetMapping("/tenant-items/{tenantId}")
+    public ResponseEntity<?> getTenantItems(@PathVariable(value = "tenantId") int tenantId){
+        return new ResponseEntity<>(tenantItemsService.getTenantItemsDto(tenantId), HttpStatus.OK);
     }
 
     @PostMapping("/tenant-items/requestDiscount")

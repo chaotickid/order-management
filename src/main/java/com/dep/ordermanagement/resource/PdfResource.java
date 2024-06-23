@@ -27,10 +27,10 @@ public class PdfResource {
     @Autowired
     private PdfService pdfService;
 
-    @GetMapping("/generatePdf/{userId}/{orderId}")
-    public ResponseEntity<byte[]> generatePdf(@PathVariable(value = "userId") String userId,
+    @GetMapping("/generateInvoice/{userId}/{orderId}")
+    public ResponseEntity<byte[]> generateInvoice(@PathVariable(value = "userId") String userId,
                                               @PathVariable(value = "orderId") String orderId) throws IOException {
-        ByteArrayInputStream bis = pdfService.generateOrderReceipt(userId, orderId);
+        ByteArrayInputStream bis = pdfService.generateInvoice(userId, orderId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=order_receipt.pdf");
