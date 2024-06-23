@@ -121,7 +121,7 @@ public class LoginService {
      */
     public TenantDto signUpUser(SignUpRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new CustomResponseException(ER10002, HttpStatus.BAD_REQUEST);
+            throw new CustomResponseException(ER10013, HttpStatus.BAD_REQUEST);
         }
 
         Tenant tenant = null;
@@ -132,7 +132,7 @@ public class LoginService {
         try {
             user = new User();
             user.setEmail(signUpRequest.getEmail());
-            user.setPassword(signUpRequest.getPassword());
+            user.setPassword(encoder.encode(signUpRequest.getPassword()));
             user.setUserName(signUpRequest.getUserName());
             user.setUserType("CONSUMER");
             user.setRole("USER");
@@ -160,7 +160,7 @@ public class LoginService {
         //5] add that cart to user
         user.addCartToUser(cart);
         tenantDtoToUI.setId(tenant.getId());
-        tenantDtoToUI.setTenantName(tenant.getTenantName());
+        tenantDtoToUI.setTenantName(user.getUserName());
         tenantDtoToUI.setEmail(signUpRequest.getEmail());
         return tenantDtoToUI;
     }
