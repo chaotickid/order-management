@@ -13,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -64,11 +65,29 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/auth/**").permitAll()
+                        auth.requestMatchers(
+                                //swagger API's
+                              "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/v3/api-docs/swagger-config/**"
+                                //application API's
+                                        ,"/api/v1/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    // swagger UI: http://localhost:8080/swagger-ui/index.html, http://localhost:8080/v3/api-docs
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return (web) ->  web.ignoring().requestMatchers(
+                //swagger API's
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/v3/api-docs/swagger-config/**"
+                //application API's
+                ,"/api/v1/auth/**");
     }
 }
